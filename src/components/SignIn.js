@@ -34,7 +34,6 @@ function SignIn() {
             id="username"
             label="Username"
             name="username"
-            autoFocus
           />
           <TextField
             autoComplete="off"

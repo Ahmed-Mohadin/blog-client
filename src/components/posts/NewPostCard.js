@@ -2,10 +2,20 @@ import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material';
+
+import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 
-function NewPost() {
+const StyledButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.primary.contrastText,
+  backgroundColor: theme.palette.primary.main,
+  padding: theme.spacing(1),
+  borderRadius: theme.shape.borderRadius,
+}));
+
+function NewPost({ postTitle, postContent, postLink }) {
   return (
     <Paper
       sx={{
@@ -16,7 +26,7 @@ function NewPost() {
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        backgroundImage: `url(https://www.freecodecamp.org/news/content/images/2021/06/w-qjCHPZbeXCQ-unsplash.jpg)`,
+        backgroundImage: `url(https://st2.depositphotos.com/1420973/6409/i/600/depositphotos_64095317-stock-photo-blog-concept-cloud-chart-print.jpg)`,
       }}
     >
       {/* Increase the priority of the hero background image */}
@@ -24,7 +34,7 @@ function NewPost() {
         <img
           style={{ display: 'none' }}
           src={
-            'https://www.freecodecamp.org/news/content/images/2021/06/w-qjCHPZbeXCQ-unsplash.jpg'
+            'https://st2.depositphotos.com/1420973/6409/i/600/depositphotos_64095317-stock-photo-blog-concept-cloud-chart-print.jpg'
           }
           alt={'post imag'}
         />
@@ -54,14 +64,25 @@ function NewPost() {
               color="inherit"
               gutterBottom
             >
-              Post Title
+              {postTitle}
             </Typography>
-            <Typography variant="h5" color="inherit" paragraph>
-              Post Description
+            <Typography
+              variant="h5"
+              color="inherit"
+              paragraph
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: '2',
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
+              {postContent}
             </Typography>
-            <Link variant="subtitle1" href="#">
-              Post Link Text
-            </Link>
+            <StyledButton variant="contained" component={Link} to={postLink}>
+              Continue reading…
+            </StyledButton>
           </Box>
         </Grid>
       </Grid>

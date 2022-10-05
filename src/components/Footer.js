@@ -21,8 +21,8 @@ function Footer() {
       <Typography
         variant="subtitle1"
         color="text.secondary"
-        component="p"
-        sx={{ display: 'inline', marginRight: '0.25rem' }}
+        component="span"
+        sx={{ marginRight: '0.25rem' }}
       >
         Built by
       </Typography>
@@ -46,7 +46,7 @@ function Footer() {
         target="_blank"
         rel="noreferrer"
       >
-        Source{' '}
+        Source
       </StyledLinkFooter>
       <Typography
         variant="body2"
