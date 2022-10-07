@@ -3,7 +3,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material';
-import { Link } from 'react-router-dom';
+
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { signOut, reset } from '../features/user/userSlice';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -27,6 +30,16 @@ const StyledLogoButton = styled(StyledButton)(({ theme }) => ({
 }));
 
 function Navbar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
+  const onSignOut = () => {
+    dispatch(signOut());
+    dispatch(reset());
+    navigate('/');
+  };
+
   return (
     <AppBar position="static">
       <StyledToolbar>
@@ -45,20 +58,28 @@ function Navbar() {
           B
         </StyledLogoButton>
         <Box>
-          <StyledButton
-            variant="outlined"
-            component={Link}
-            to={'/blog/sign-up'}
-          >
-            Sign Up
-          </StyledButton>
-          <StyledButton
-            variant="outlined"
-            component={Link}
-            to={'/blog/sign-in'}
-          >
-            Sign In
-          </StyledButton>
+          {user ? (
+            <StyledButton variant="outlined" onClick={onSignOut}>
+              Sign Out
+            </StyledButton>
+          ) : (
+            <>
+              <StyledButton
+                variant="outlined"
+                component={Link}
+                to={'/blog/sign-up'}
+              >
+                Sign Up
+              </StyledButton>
+              <StyledButton
+                variant="outlined"
+                component={Link}
+                to={'/blog/sign-in'}
+              >
+                Sign In
+              </StyledButton>
+            </>
+          )}
         </Box>
       </StyledToolbar>
     </AppBar>
