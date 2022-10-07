@@ -15,7 +15,10 @@ function App() {
     <div className="App">
       <CssBaseline />
       <NavBar />
-      <Container sx={{ marginTop: '2rem', paddingBottom: '3rem' }}>
+      <Container
+        sx={{ marginTop: '2rem', paddingBottom: '3rem' }}
+        maxWidth="lg"
+      >
         <Routes>
           <Route path="/blog" element={<Home />} />
           <Route path="/blog/sign-up" element={<SignUp />} />

@@ -2,10 +2,12 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from '@mui/material';
-
 import { useParams } from 'react-router-dom';
 import PostInfoCard from '../components/posts/PostInfoCard';
-import useFetchSingle from '../hooks/useFetchSingle';
+
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchSinglePost, reset } from '../features/post/postSlice';
 
 const StyledBoxMain = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
@@ -16,38 +18,50 @@ const StyledBoxMain = styled(Box)(({ theme }) => ({
 
 function PostInfo() {
   const id = useParams().id;
-  const { data, error, loading } = useFetchSingle(
-    `http://localhost:8080/api/posts/${id}`
-  );
-  if (error) {
-    return null;
-  }
+  const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
+  const { posts, error, status, message } = useSelector((state) => state.posts);
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+    }
+    dispatch(fetchSinglePost(id));
+    return () => {
+      dispatch(reset());
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, error, message, id, dispatch]);
+
   return (
     <Box>
       <StyledBoxMain
         component={'main'}
         sx={{
-          display: loading || error ? 'flex' : 'flexbox',
+          display: status !== 'succeeded' ? 'flex' : 'flexbox',
         }}
       >
-        {loading && (
+        {status === 'loading' ? (
           <Box color="success">
             <CircularProgress />
           </Box>
-        )}
-        {error && (
+        ) : null}
+        {status === 'failed' ? (
           <Typography variant="h6" color="primary">
             Failed to fetch
           </Typography>
-        )}
-        {data && (
+        ) : null}
+        {posts && (
           <PostInfoCard
-            postTitle={data.title}
-            postCreatedDate={new Date(data.createdAt).toDateString()}
-            postUpdatedDate={new Date(data.updatedAt).toDateString()}
-            postAuthor={data.author.username}
-            postContent={data.content}
-            postComments={data.comments}
+            user={user}
+            postTitle={posts[0]?.title}
+            postCreatedDate={new Date(posts[0]?.createdAt).toDateString()}
+            postUpdatedDate={new Date(posts[0]?.updatedAt).toDateString()}
+            postAuthor={posts[0]?.author.username}
+            postContent={posts[0]?.content}
+            postComments={posts[0]?.comments}
           />
         )}
       </StyledBoxMain>
